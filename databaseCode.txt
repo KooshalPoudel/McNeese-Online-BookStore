@@ -1,0 +1,119 @@
+-- McNeese Online Bookstore Database
+-- Run this in phpMyAdmin or MySQL CLI
+-- NOTE: This will DROP existing tables and recreate them (data will be lost)
+
+CREATE DATABASE IF NOT EXISTS mcneese_bookstore CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE mcneese_bookstore;
+
+-- Drop existing tables (in correct order due to foreign keys)
+DROP TABLE IF EXISTS order_items;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS cart;
+DROP TABLE IF EXISTS books;
+DROP TABLE IF EXISTS users;
+
+-- Users / Students table
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    student_id VARCHAR(20) UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    address TEXT,
+    role ENUM('student', 'admin') DEFAULT 'student',
+    profile_picture VARCHAR(255) DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Books / Products table
+CREATE TABLE IF NOT EXISTS books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    isbn VARCHAR(20) UNIQUE,
+    price DECIMAL(10,2) NOT NULL,
+    stock INT DEFAULT 0,
+    category ENUM('textbook', 'office_supply', 'other') DEFAULT 'textbook',
+    description TEXT,
+    cover_image VARCHAR(255),
+    course_code VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Orders table (IMPROVED)
+CREATE TABLE IF NOT EXISTS orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+
+    -- Customer info (snapshot at time of order)
+    full_name VARCHAR(200) NOT NULL,
+    phone VARCHAR(30),
+
+    -- Structured shipping address
+    street VARCHAR(255) NOT NULL,
+    apt VARCHAR(100),
+    city VARCHAR(100) NOT NULL,
+    state VARCHAR(2) NOT NULL,
+    zip VARCHAR(10) NOT NULL,
+
+    -- Order totals (all parts saved)
+    subtotal DECIMAL(10,2) NOT NULL,
+    shipping_cost DECIMAL(10,2) DEFAULT 0,
+    tax DECIMAL(10,2) DEFAULT 0,
+    total DECIMAL(10,2) NOT NULL,
+
+    -- Status tracking
+    status ENUM('pending','processing','shipped','delivered','cancelled') DEFAULT 'pending',
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Order items (IMPROVED - snapshots book info so order history survives book deletion)
+CREATE TABLE IF NOT EXISTS order_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    book_id INT,
+
+    -- Snapshot of book info at time of order
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255),
+    cover_image VARCHAR(255),
+
+    quantity INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE SET NULL
+);
+
+-- Cart table
+CREATE TABLE IF NOT EXISTS cart (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    book_id INT NOT NULL,
+    quantity INT DEFAULT 1,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
+);
+
+-- Sample books data with cover images
+INSERT INTO books (title, author, isbn, price, stock, category, course_code, description, cover_image) VALUES
+('Software Engineering', 'Ian Sommerville', '978-0133943030', 89.99, 25, 'textbook', 'CSCI 413', 'Classic software engineering textbook', 'images/softwareEngineeringIanSommerville.png'),
+('Database Systems', 'Ramez Elmasri', '978-0133970777', 79.99, 20, 'textbook', 'CSCI 350', 'Fundamentals of Database Systems', 'images/databaseSystemsElmasri.png'),
+('Calculus: Early Transcendentals', 'James Stewart', '978-1285741550', 120.00, 30, 'textbook', 'MATH 201', 'Complete calculus textbook', 'images/calculusJamesStewart.png'),
+('Physics for Scientists', 'Raymond Serway', '978-1337553292', 95.00, 15, 'textbook', 'PHYS 201', 'University Physics', 'images/physicsRaymond.png'),
+('Notebook Set (5-Pack)', 'McNeese Store', NULL, 12.99, 100, 'office_supply', NULL, 'College-ruled notebooks', 'images/notebookSet.png'),
+('Ballpoint Pens (12-Pack)', 'McNeese Store', NULL, 7.99, 200, 'office_supply', NULL, 'Black and blue pens', 'images/ballpointPen.png'),
+('Highlighters Set', 'McNeese Store', NULL, 5.99, 150, 'office_supply', NULL, 'Assorted color highlighters', 'images/highlighterSet.png'),
+('Backpack - McNeese Cowboys', 'McNeese Store', NULL, 45.00, 40, 'office_supply', NULL, 'Official McNeese Cowboys backpack', 'images/cowsboysBackpack.png');
+
+
+ALTER TABLE orders 
+ADD COLUMN order_number VARCHAR(20) UNIQUE AFTER id;

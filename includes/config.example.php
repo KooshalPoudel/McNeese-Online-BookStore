@@ -1,4 +1,7 @@
 <?php
+// Copy this file to config.php (in the same /includes folder) and update with your local values.
+// Setup: cp includes/config.example.php includes/config.php
+
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
@@ -22,12 +25,10 @@ function getConnection() {
     return $conn;
 }
 
-// Start session if not started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Session timeout check
 if (isset($_SESSION['user_id']) && isset($_SESSION['last_activity'])) {
     if (time() - $_SESSION['last_activity'] > SESSION_TIMEOUT) {
         session_unset();

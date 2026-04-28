@@ -1,0 +1,49 @@
+# ---------- Sensitive / local config ----------
+includes/config.php
+
+# ---------- Uploaded user content ----------
+uploads/
+assets/uploads/
+profile_pictures/
+
+# ---------- PHP / Composer ----------
+/vendor/
+composer.lock
+
+# ---------- Node ----------
+/node_modules/
+npm-debug.log*
+package-lock.json
+
+# ---------- Environment files ----------
+.env
+.env.local
+.env.*.local
+
+# ---------- Logs ----------
+*.log
+logs/
+error_log
+
+# ---------- OS files ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- Editor / IDE ----------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ---------- Database dumps & backups ----------
+*.sql.bak
+*.sqlite
+*.sqlite3
+backup/
+dumps/
+
+# ---------- Misc ----------
+*.tmp
+*.cache

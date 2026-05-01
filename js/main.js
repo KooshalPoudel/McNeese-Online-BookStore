@@ -1,17 +1,31 @@
-// McNeese Online Bookstore - Main JS
+// main.js
+// McNeese Online Bookstore frontend scripts
+// Auth0r: Rojal 
+//        validation, password strength, form behavior
+//        cancel modal added Week 7
+// Rojal: kept all js in one file so we dont load multiple scripts
+//        each section is self-contained
+
 
 document.addEventListener('DOMContentLoaded', function () {
 
     // Mobile menu toggle
+    // Rojal: simple toggle for the hamburger menu in header.php
     var mobileMenuBtn = document.getElementById('mobileMenuBtn');
     var mobileNav = document.getElementById('mobileNav');
     if (mobileMenuBtn && mobileNav) {
         mobileMenuBtn.addEventListener('click', function () {
-            mobileNav.classList.toggle('open');
+            mobileNav.classList.toggle('open');  // css handles slide
         });
     }
 
-    // Password strength checker
+
+    // Password strength checker (register.php)
+    // Rojal: instant feedback as user types
+    //        each rule passed = +1 score, max 5
+    // Alok: strength bar look great
+    //       maybe little color difference between Good and Strong
+    //       but no big deal
     var pwInput = document.getElementById('password');
     var strengthBar = document.getElementById('strengthFill');
     var strengthText = document.getElementById('strengthText');
@@ -20,12 +34,15 @@ document.addEventListener('DOMContentLoaded', function () {
         pwInput.addEventListener('input', function () {
             var password = this.value;
             var score = 0;
-            if (password.length >= 8)  score++;
-            if (password.length >= 12) score++;
-            if (/[A-Z]/.test(password)) score++;
-            if (/[0-9]/.test(password)) score++;
-            if (/[^A-Za-z0-9]/.test(password)) score++;
 
+            // Rojal: each check adds 1 to score
+            if (password.length >= 8)  score++;          // min length
+            if (password.length >= 12) score++;          // bonus for longer
+            if (/[A-Z]/.test(password)) score++;         // has uppercase
+            if (/[0-9]/.test(password)) score++;         // has digit
+            if (/[^A-Za-z0-9]/.test(password)) score++;  // has special char
+
+            // Rojal: score 0 to5 with matching label and color
             var levels = [
                 { label: '', color: '' },
                 { label: 'Weak', color: '#e74c3c' },
@@ -34,9 +51,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 { label: 'Strong', color: '#27ae60' },
                 { label: 'Very Strong', color: '#1abc9c' }
             ];
-            var result = levels[Math.min(score, 5)];
+            var result = levels[Math.min(score, 5)];  // clamp to 5 just in case
             var pct = (score / 5) * 100;
 
+            // update the bar fill width and color
             strengthBar.style.width = pct + '%';
             strengthBar.style.background = result.color;
             if (strengthText) {
@@ -46,7 +64,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Confirm password match
+
+    // Confirm password match (live as user types)
+    // Rojal: shows error inline if 2nd password doesnt match
     var pw2 = document.getElementById('confirm_password');
     if (pw2 && pwInput) {
         pw2.addEventListener('input', function () {
@@ -63,13 +83,25 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Auto-hide success alerts only (keep errors visible until user sees them)
+
+    // Auto-hide success alerts after 4 sec
+    // Rojal: errors stay visible because user need to read them
+    //        success messages fade out on their own
     document.querySelectorAll('.alert.alert-success').forEach(function (el) {
-        setTimeout(function () { el.style.transition = 'opacity 0.5s'; el.style.opacity = '0'; }, 4000);
+        // first timeout starts the fade
+        setTimeout(function () {
+            el.style.transition = 'opacity 0.5s';
+            el.style.opacity = '0';
+        }, 4000);
+        // second timeout removes element after fade done
         setTimeout(function () { el.remove(); }, 4500);
     });
 
-    // Register form validation
+
+    // Register form validation (extra layer on top of PHP)
+    // Rojal: catches bad email and missing terms before form submits
+    //        instant feedback, no page reload
+    // Kushal: good, lessround trips when validation fails
     var registerForm = document.getElementById('registerForm');
     var emailInput = document.getElementById('email');
     var termsInput = document.getElementById('terms');
@@ -81,6 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var hasError = false;
             var email = emailInput.value.trim().toLowerCase();
 
+            // Email check
             if (!email) {
                 e.preventDefault();
                 if (emailError) {
@@ -90,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 emailInput.classList.add('error');
                 hasError = true;
             } else if (!email.endsWith('@mcneese.edu')) {
+                // Rojal: must end with @mcneese.edu, McNeese students only
                 e.preventDefault();
                 if (emailError) {
                     emailError.textContent = 'Please use your @mcneese.edu email address.';
@@ -98,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 emailInput.classList.add('error');
                 hasError = true;
             } else {
+                // email looks good, reset to hint style
                 if (emailError) {
                     emailError.textContent = 'Only @mcneese.edu email addresses are allowed';
                     emailError.className = 'field-hint';
@@ -105,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 emailInput.classList.remove('error');
             }
 
+            // Terms checkbox check
             if (termsInput && !termsInput.checked) {
                 e.preventDefault();
                 if (termsError) {
@@ -119,7 +155,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // User menu toggle & close on outside click
+
+    // User dropdown menu toggle (header)
+    // Rojal: click trigger to open, click outside to close
     var userMenu = document.getElementById('userMenu');
     if (userMenu) {
         var trigger = userMenu.querySelector('.user-trigger');
@@ -128,6 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 userMenu.classList.toggle('open');
             });
         }
+        // close menu when clicking anywhere outside
         document.addEventListener('click', function (e) {
             if (userMenu && !userMenu.contains(e.target)) {
                 userMenu.classList.remove('open');
@@ -137,29 +176,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
+
+// Cancel-Order modal handler (orders.php + order_details.php)
+// Added by Rojal
+// Kushal: lives in second DOMContentLoaded so it dont conflict
+//         with the form-validation block above
 document.addEventListener('DOMContentLoaded', function () {
- 
+
     var cancelModal      = document.getElementById('cancelOrderModal');
     var cancelOrderIdIn  = document.getElementById('cancelOrderIdInput');
     var cancelOrderLabel = document.getElementById('cancelOrderNumberLabel');
- 
-    if (!cancelModal) return; // no modal on this page
- 
+
+    // Rojal: not every page has the cancel modal, bail early if missing
+    if (!cancelModal) return;
+
+    // open modal with given order info
     function openCancelModal(orderId, orderNumber) {
         if (cancelOrderIdIn)  cancelOrderIdIn.value = orderId;
+        // Rojal: fallback to "#id" if no order_number set
         if (cancelOrderLabel) cancelOrderLabel.textContent = orderNumber || '#' + orderId;
         cancelModal.classList.add('is-open');
         cancelModal.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('modal-open');
+        document.body.classList.add('modal-open');  // prevents background scroll
     }
- 
+
+    // close modal cleanly
     function closeCancelModal() {
         cancelModal.classList.remove('is-open');
         cancelModal.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('modal-open');
     }
- 
-    // Any button marked data-cancel-order opens the modal
+
+    // any [data-cancel-order] button opens the modal with that order data
     document.querySelectorAll('[data-cancel-order]').forEach(function (btn) {
         btn.addEventListener('click', function () {
             var oid = btn.getAttribute('data-order-id');
@@ -167,22 +215,23 @@ document.addEventListener('DOMContentLoaded', function () {
             openCancelModal(oid, onm);
         });
     });
- 
-    // Any element marked data-modal-close closes the modal
+
+    // any [data-modal-close] element closes the modal
     cancelModal.querySelectorAll('[data-modal-close]').forEach(function (el) {
         el.addEventListener('click', closeCancelModal);
     });
- 
-    // Click outside the modal body closes it
+
+    // click backdrop (outside modal box) = close
     cancelModal.addEventListener('click', function (e) {
         if (e.target === cancelModal) closeCancelModal();
     });
- 
-    // Escape key closes it
+
+    // Escape key also closes
+    // Rojal: small accessibility thing but nice to have
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && cancelModal.classList.contains('is-open')) {
             closeCancelModal();
         }
     });
- 
+
 });

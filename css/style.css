@@ -1,8 +1,15 @@
-/* ============================================
-   McNeese Online Bookstore - Main Stylesheet
-   ============================================ */
+/* McNeese Online Bookstore - Main Stylesheet
+   CSS work led by Kelsang
+   Layout/structure pairs with Alok (Week 1-2)
+   Search styles refactored by Kelsang in Week 5
+   Cart/checkout/order styles done in Week 6
+   Modal + admin styles added Week 7
+   Kelsang: kept everything in one file so we dont
+            have multiple stylesheet to load
+   Alok: makes loading faster too i think */
 
-/* ── Reset & Base ── */
+/* Reset & Base */
+/* Kelsang: standard reset, used on every page */
 *,
 *::before,
 *::after {
@@ -11,6 +18,8 @@
   padding: 0;
 }
 
+/* Kelsang: all the brand colors and tokens go here
+   so we can change theme in one place */
 :root {
   --ink: #0f0f0f;
   --ink-soft: #5a5a5a;
@@ -51,9 +60,10 @@ a {
   text-decoration: none;
 }
 
-/* ============================================
-   SITE HEADER
-   ============================================ */
+
+/* SITE HEADER */
+/* Built by Alok and Kelsang (Week 1) */
+/* Kelsang: sticky so nav stay on top when user scroll */
 .site-header {
   position: sticky;
   top: 0;
@@ -73,7 +83,8 @@ a {
   gap: 40px;
 }
 
-/* ── Logo ── */
+/* Logo */
+/* Alok: logo box with the small svg mark + text */
 .logo {
   display: flex;
   align-items: center;
@@ -112,7 +123,8 @@ a {
   text-transform: uppercase;
 }
 
-/* ── Main Nav ── */
+/* Main Nav */
+/* Alok: active state is bolder + has paper bg */
 .main-nav {
   display: flex;
   align-items: center;
@@ -140,7 +152,7 @@ a {
   font-weight: 600;
 }
 
-/* ── Header Actions ── */
+/* Header Actions */
 .header-actions {
   margin-left: auto;
   display: flex;
@@ -171,6 +183,7 @@ a {
   opacity: 0.6;
 }
 
+/* Kushal: cart badge shows count, only render when > 0 */
 .cart-badge {
   position: absolute;
   top: 5px;
@@ -188,9 +201,10 @@ a {
   line-height: 1;
 }
 
-/* ============================================
-   BUTTONS
-   ============================================ */
+
+/* BUTTONS */
+/* Kelsang: all the button variations live here */
+/* Alok: we use these everywhere, much easier than inline styles */
 .btn-ghost {
   font-family: var(--font-sans);
   font-size: 13.5px;
@@ -264,6 +278,7 @@ a {
   opacity: 0.6;
 }
 
+/* Alok: small Add button for book cards */
 .btn-add {
   font-family: var(--font-sans);
   font-size: 11.5px;
@@ -329,6 +344,7 @@ a {
   opacity: 0.65;
 }
 
+/* Alok: full-width submit for login/register form */
 .btn-submit {
   font-family: var(--font-sans);
   font-size: 15px;
@@ -351,7 +367,9 @@ a {
   box-shadow: 0 4px 12px rgba(10, 34, 64, 0.3);
 }
 
-/* ── User Menu ── */
+/* User Menu */
+/* Rojal: dropdown toggle in main.js, css just hide/show via .open class */
+/* Kelsang: avatar circle with first letter of first name */
 .user-menu {
   position: relative;
 }
@@ -450,7 +468,8 @@ a {
   background: #fdf2f1;
 }
 
-/* ── Mobile Menu ── */
+/* Mobile Menu */
+/* Kelsang: only show on small screens, hide rest of nav */
 .mobile-menu-btn {
   display: none;
   background: none;
@@ -504,16 +523,17 @@ a {
   color: var(--red);
 }
 
-/* ── Main Content ── */
+/* Main Content */
 .main-content {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 32px;
 }
 
-/* ============================================
-   HERO (index.php)
-   ============================================ */
+
+/* HERO (index.php) */
+/* Alok: big hero on homepage, with eyebrow + heading + buttons */
+/* Kelsang: i tweak the spacing here few times to look balance */
 .hero {
   padding: 80px 32px 76px;
   border-bottom: 1px solid var(--rule);
@@ -576,9 +596,9 @@ a {
   justify-content: center;
 }
 
-/* ============================================
-   FEATURES STRIP (index.php)
-   ============================================ */
+
+/* FEATURES STRIP (index.php) */
+/* Kelsang: 5 cards with little icons explaining the site features */
 .features-strip {
   padding: 44px 0;
   border-bottom: 1px solid var(--rule);
@@ -633,9 +653,8 @@ a {
   line-height: 1.6;
 }
 
-/* ============================================
-   SECTIONS
-   ============================================ */
+
+/* SECTIONS */
 .section {
   padding: 52px 0;
 }
@@ -681,9 +700,10 @@ a {
   opacity: 0.5;
 }
 
-/* ============================================
-   BOOKS GRID
-   ============================================ */
+
+/* BOOKS GRID */
+/* Alok: 4-col grid on desktop, scales down on smaller screens */
+/* Kelsang: i added the hover zoom on the cover image, look nice */
 .books-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -728,6 +748,7 @@ a {
   color: #d8d5d0;
 }
 
+/* Kushal: small badge top-left showing if its textbook or supply */
 .category-badge {
   position: absolute;
   top: 8px;
@@ -797,9 +818,9 @@ a {
   letter-spacing: -0.01em;
 }
 
-/* ============================================
-   CTA BAND
-   ============================================ */
+
+/* CTA BAND */
+/* Alok: dark band with call-to-action on homepage */
 .cta-band {
   margin: 0 -32px;
   padding: 60px 32px;
@@ -821,9 +842,9 @@ a {
   margin-bottom: 28px;
 }
 
-/* ============================================
-   FORMS
-   ============================================ */
+
+/* FORMS */
+/* Kelsang: shared input styles for register, login, profile, checkout */
 .form-group {
   margin-bottom: 18px;
 }
@@ -873,6 +894,7 @@ textarea:focus {
   box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.08);
 }
 
+/* Kushal: error class added by PHP when validation fails */
 input.error {
   border-color: var(--red);
 }
@@ -921,9 +943,9 @@ input.error {
   border-top: 1px solid var(--light-gray);
 }
 
-/* ============================================
-   ALERTS
-   ============================================ */
+
+/* ALERTS */
+/* Alok: green for success, red for error */
 .alert {
   padding: 14px 18px;
   border-radius: var(--radius-sm);
@@ -946,9 +968,10 @@ input.error {
   border: 1px solid #f5c6cb;
 }
 
-/* ============================================
-   AUTH PAGE (register.php)
-   ============================================ */
+
+/* AUTH PAGE (register.php) */
+/* Alok and Kelsang: built this card layout in week 3 */
+/* Kelsang: gradient stripe on top look really nice */
 .auth-page {
   min-height: 100vh;
   background: linear-gradient(135deg, var(--paper), #e8e4f0);
@@ -1042,7 +1065,8 @@ input.error {
   font-weight: 500;
 }
 
-/* ── Password Strength ── */
+/* Password Strength */
+/* Rojal: bar fills based on score from JS, color match the level */
 .password-strength {
   margin-top: 6px;
 }
@@ -1066,9 +1090,10 @@ input.error {
   font-size: 11px;
 }
 
-/* ============================================
-   LOGIN PAGE (Split Panel)
-   ============================================ */
+
+/* LOGIN PAGE (Split Panel) */
+/* Alok: split layout, dark side on left + form on right */
+/* Kelsang: i adjust the spacing and font size to look balance */
 .login-body {
   font-family: var(--font-sans);
   background: var(--paper);
@@ -1260,9 +1285,10 @@ input.error {
   color: var(--ink);
 }
 
-/* ============================================
-   PROFILE PAGE
-   ============================================ */
+
+/* PROFILE PAGE */
+/* Kushal + Rojal Week 3 */
+/* Rojal: i did most of css here, alignment was bit tricky on mobile */
 .page-header {
   padding: 40px 0 32px;
   border-bottom: 1px solid var(--rule);
@@ -1303,6 +1329,7 @@ input.error {
   background: var(--paper);
 }
 
+/* Rojal: avatar with gradient bg, looks nicer than flat color */
 .profile-avatar {
   width: 56px;
   height: 56px;
@@ -1401,7 +1428,7 @@ input.error {
   background: #fdf2f1;
 }
 
-/* ── Panels ── */
+/* Panels */
 .panels {
   display: flex;
   flex-direction: column;
@@ -1453,9 +1480,9 @@ input.error {
   padding: 24px;
 }
 
-/* ============================================
-   FOOTER
-   ============================================ */
+
+/* FOOTER */
+/* Alok and Kelsang Week 1 */
 .site-footer {
   margin-top: 80px;
   border-top: 1px solid var(--rule);
@@ -1588,9 +1615,9 @@ input.error {
   color: var(--ink-faint);
 }
 
-/* ============================================
-   BOOKS PAGE (Filter Tabs, Stock, Details)
-   ============================================ */
+
+/* BOOKS PAGE (Filter Tabs, Stock, Details) */
+/* Week 4 work, all four members contributed */
 .filter-tabs {
   display: flex;
   gap: 2px;
@@ -1630,6 +1657,7 @@ input.error {
   border-bottom-color: var(--white);
 }
 
+/* Kelsang: count badge next to each tab */
 .filter-tab-count {
   font-size: 11px;
   font-weight: 500;
@@ -1660,6 +1688,8 @@ input.error {
   overflow: hidden;
 }
 
+/* Kushal: 3 stock states, dot color change per state */
+/* Kelsang: i pick the colors to look clear */
 .stock-status {
   display: flex;
   align-items: center;
@@ -1708,7 +1738,8 @@ input.error {
   opacity: 1;
 }
 
-/* ── Empty State ── */
+/* Empty State */
+/* Alok: shown when no books match filter or no orders yet */
 .empty-state {
   text-align: center;
   padding: 72px 24px;
@@ -1741,9 +1772,9 @@ input.error {
   margin-bottom: 24px;
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+
+/* RESPONSIVE */
+/* Kelsang: breakpoints to handle tablet + mobile */
 @media (max-width: 1024px) {
   .books-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -1840,11 +1871,11 @@ input.error {
   }
 }
 
-/* ============================================
-   SEARCH PAGE
-   ============================================ */
 
-/* ── Search Hero ── */
+/* SEARCH PAGE */
+/* Week 5, Kelsang: i moved all search styles into this section */
+/* before everything was inline mess, now its centralize */
+/* Search Hero */
 .search-hero {
   padding: 56px 0 48px;
   text-align: center;
@@ -1870,7 +1901,8 @@ input.error {
   margin-bottom: 32px;
 }
 
-/* ── Search Bar ── */
+/* Search Bar */
+/* Alok: big rounded search bar with focus glow effect */
 .search-bar-wrap {
   max-width: 620px;
   margin: 0 auto 20px;
@@ -1933,7 +1965,8 @@ input.error {
   opacity: 0.6;
 }
 
-/* ── Category Pills ── */
+/* Category Pills */
+/* Kushal: pills below search bar for quick category filter */
 .category-pills {
   display: flex;
   justify-content: center;
@@ -1973,7 +2006,8 @@ input.error {
   height: 14px;
 }
 
-/* ── Search Layout: Sidebar + Results ── */
+/* Search Layout: Sidebar + Results */
+/* Rojal + Kelsang: sidebar with filters on left, results on right */
 .search-layout {
   display: grid;
   grid-template-columns: 220px 1fr;
@@ -1982,7 +2016,7 @@ input.error {
   align-items: start;
 }
 
-/* ── Search Sidebar ── */
+/* Search Sidebar */
 .search-sidebar {
   position: sticky;
   top: 86px;
@@ -2018,7 +2052,8 @@ input.error {
   height: 14px;
 }
 
-/* ── Filter Radio Options ── */
+/* Filter Radio Options */
+/* Kelsang: i custom the radio with css to match brand color */
 .search-sidebar .filter-option {
   display: flex;
   align-items: center;
@@ -2051,7 +2086,8 @@ input.error {
   color: var(--ink);
 }
 
-/* ── Price Range Inputs ── */
+/* Price Range Inputs */
+/* Rojal: two number boxes for min and max */
 .price-row {
   display: flex;
   gap: 8px;
@@ -2086,7 +2122,8 @@ input.error {
   flex-shrink: 0;
 }
 
-/* ── Sidebar Apply / Clear ── */
+/* Sidebar Apply / Clear */
+/* Kelsang: clear preserve search query, only drop filters */
 .sidebar-apply {
   padding: 14px 20px;
   border-top: 1px solid var(--rule);
@@ -2124,7 +2161,7 @@ input.error {
   color: var(--ink);
 }
 
-/* ── Results Area ── */
+/* Results Area */
 .results-area {
   min-width: 0;
 }
@@ -2140,7 +2177,7 @@ input.error {
   font-weight: 600;
 }
 
-/* ── Search Page Responsive ── */
+/* Search Page Responsive */
 @media (max-width: 900px) {
   .search-layout {
     grid-template-columns: 1fr;
@@ -2167,11 +2204,10 @@ input.error {
   }
 }
 
-/* ============================================
-   CART PAGE
-   ============================================ */
 
-/* ── Cart Layout ── */
+/* CART PAGE */
+/* Week 6, Alok lead the cart UI + Kelsang on stock + styling */
+/* Cart Layout */
 .cart-layout {
   display: grid;
   grid-template-columns: 1fr 300px;
@@ -2179,7 +2215,7 @@ input.error {
   align-items: start;
 }
 
-/* ── Cart Items Panel ── */
+/* Cart Items Panel */
 .cart-panel {
   border: 1px solid var(--rule);
   border-radius: var(--radius);
@@ -2224,7 +2260,8 @@ input.error {
   opacity: 0.4;
 }
 
-/* ── Cart Item Row ── */
+/* Cart Item Row */
+/* Alok: 7-column grid for thumb/info/price/qty/subtotal/remove */
 .cart-item {
   display: grid;
   grid-template-columns: auto 1fr auto auto auto auto auto;
@@ -2287,7 +2324,8 @@ input.error {
   white-space: nowrap;
 }
 
-/* ── Quantity Controls ── */
+/* Quantity Controls */
+/* Alok: minus and plus button with qty in middle */
 .qty-form {
   display: flex;
   align-items: center;
@@ -2391,6 +2429,7 @@ input.error {
   white-space: nowrap;
 }
 
+/* Kelsang: trash icon for remove button, replaced emoji */
 .btn-remove {
   background: none;
   border: none;
@@ -2411,7 +2450,7 @@ input.error {
   opacity: 0.5;
 }
 
-/* ── Cart Footer ── */
+/* Cart Footer */
 .cart-footer {
   padding: 14px 20px;
   border-top: 1px solid var(--rule);
@@ -2432,7 +2471,8 @@ input.error {
   color: var(--ink);
 }
 
-/* ── Order Summary Panel ── */
+/* Order Summary Panel */
+/* Kushal: reusable summary box, used in cart and checkout */
 .summary-panel {
   border: 1px solid var(--rule);
   border-radius: var(--radius);
@@ -2479,6 +2519,7 @@ input.error {
   font-weight: 600;
 }
 
+/* Alok: nudge user to add more for free shipping */
 .shipping-nudge {
   font-size: 11.5px;
   color: var(--ink-faint);
@@ -2543,7 +2584,8 @@ input.error {
   color: var(--ink-faint);
 }
 
-/* ── Cart Responsive ── */
+/* Cart Responsive */
+/* Rojal: tested mobile, found cart row was too cramped, adjusted to 3 cols */
 @media (max-width: 860px) {
   .cart-layout {
     grid-template-columns: 1fr;
@@ -2573,10 +2615,9 @@ input.error {
   }
 }
 
-/* ============================================
-   CHECKOUT PAGE
-   ============================================ */
 
+/* CHECKOUT PAGE */
+/* Week 6, Kushal + Rojal on shipping form, Rojal + Kelsang on payment */
 .checkout-layout {
   display: grid;
   grid-template-columns: 1fr 340px;
@@ -2634,6 +2675,8 @@ input.error {
   cursor: default;
 }
 
+/* Kushal: yellow warning box telling users not to use real card */
+/* this is a class project, not real payment */
 .payment-warning {
   padding: 14px 16px;
   border-radius: var(--radius);
@@ -2697,7 +2740,7 @@ input.error {
   opacity: 0.6;
 }
 
-/* ── Checkout Summary ── */
+/* Checkout Summary */
 .checkout-summary {
   border: 1px solid var(--rule);
   border-radius: var(--radius);
@@ -2757,7 +2800,7 @@ input.error {
   margin: 14px 0;
 }
 
-/* ── Checkout Responsive ── */
+/* Checkout Responsive */
 @media (max-width: 860px) {
   .checkout-layout {
     grid-template-columns: 1fr;
@@ -2767,10 +2810,9 @@ input.error {
   }
 }
 
-/* ============================================
-   PROFILE PAGE - EDIT BUTTON & CANCEL
-   ============================================ */
 
+/* PROFILE PAGE - EDIT BUTTON & CANCEL */
+/* Kushal: edit toggle added later, button switch view to edit mode */
 .btn-edit-profile {
   margin-left: auto;
   font-family: var(--font-sans);
@@ -2823,6 +2865,7 @@ input.error {
 }
 
 /* 3-column form row for City/State/ZIP */
+/* Rojal: state column slightly wider since some name are long */
 .form-row-3 {
     display: grid;
     grid-template-columns: 2fr 1.3fr 1fr;
@@ -2835,10 +2878,10 @@ input.error {
     }
 }
 
-/* ============================================
-   CART - INLINE STOCK ERROR
-   ============================================ */
 
+/* CART - INLINE STOCK ERROR */
+/* Kelsang: error shows next to the qty button when user hit max stock */
+/* Rojal: i added the pulse animation, draws attention nicely */
 .qty-cell {
   display: flex;
   flex-direction: column;
@@ -2881,11 +2924,10 @@ input.error {
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* ============================================
-   ORDERS PAGE
-   ============================================ */
 
-/* ── Orders Section ── */
+/* ORDERS PAGE */
+/* Week 7, Kushal lead + Alok and Kelsang on cards/tracker UI */
+/* Orders Section */
 .orders-section {
   margin-bottom: 40px;
 }
@@ -2919,7 +2961,7 @@ input.error {
   letter-spacing: 0.06em;
 }
 
-/* ── Order Card ── */
+/* Order Card */
 .order-card {
   border: 1px solid var(--rule);
   border-radius: var(--radius);
@@ -2998,7 +3040,9 @@ input.error {
   border-top: 1px solid var(--rule);
 }
 
-/* ── Status Badges ── */
+/* Status Badges */
+/* Kushal: 5 status badges with diff color each */
+/* Kelsang: i pick the colors so each status look distinct */
 .order-badge {
   display: inline-flex;
   align-items: center;
@@ -3041,7 +3085,9 @@ input.error {
   border: 1px solid #fca5a5;
 }
 
-/* ── Order Tracker (progress bar) ── */
+/* Order Tracker (progress bar) */
+/* Alok and Kelsang: 4-step progress bar showing where order is */
+/* Kushal: completed step show check mark, current have glow ring */
 .order-tracker {
   display: flex;
   align-items: center;
@@ -3112,7 +3158,7 @@ input.error {
   background: var(--accent);
 }
 
-/* ── Action Buttons ── */
+/* Action Buttons */
 .btn-view-order {
   font-family: var(--font-sans);
   font-size: 13px;
@@ -3134,6 +3180,7 @@ input.error {
   opacity: 0.85;
 }
 
+/* Rojal: cancel button red but subtle, only show for pending */
 .btn-cancel-order {
   font-family: var(--font-sans);
   font-size: 13px;
@@ -3170,11 +3217,9 @@ input.error {
   background: #fdeeec;
 }
 
-/* ============================================
-   ORDER DETAILS PAGE
-   ============================================ */
 
-/* ── Status Panel (top of details page) ── */
+/* ORDER DETAILS PAGE */
+/* Status Panel (top of details page) */
 .order-status-panel {
   border: 1px solid var(--rule);
   border-radius: var(--radius);
@@ -3218,7 +3263,7 @@ input.error {
   padding: 24px 20px 18px;
 }
 
-/* ── Shipping Address block (in items panel) ── */
+/* Shipping Address block (in items panel) */
 .order-shipping-block {
   padding: 16px 20px;
   background: var(--paper);
@@ -3240,7 +3285,7 @@ input.error {
   line-height: 1.6;
 }
 
-/* ── Orders Responsive ── */
+/* Orders Responsive */
 @media (max-width: 780px) {
   .order-card-header {
     grid-template-columns: 1fr 1fr;
@@ -3276,10 +3321,10 @@ input.error {
   }
 }
 
-/* ============================================
-   MODAL DIALOG (reusable)
-   ============================================ */
 
+/* MODAL DIALOG (reusable) */
+/* Rojal: built this in week 7 for cancel order, used everywhere */
+/* Kelsang: backdrop with blur effect look very modern */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -3315,6 +3360,7 @@ input.error {
   animation: modalSlideUp 0.2s ease-out;
 }
 
+/* Rojal: small slide-up entry animation, feels smoother than just popping in */
 @keyframes modalSlideUp {
   from { opacity: 0; transform: translateY(8px) scale(0.98); }
   to   { opacity: 1; transform: translateY(0)    scale(1); }
@@ -3461,7 +3507,8 @@ input.error {
   opacity: 0.8;
 }
 
-/* Prevent body scroll when modal is open */
+/* Prevent body scroll when modal open */
+/* Rojal: this stop background from scrolling when modal show */
 body.modal-open {
   overflow: hidden;
 }
@@ -3478,11 +3525,12 @@ body.modal-open {
   }
 }
 
-/* ============================================
-   ADMIN DASHBOARD
-   ============================================ */
 
-/* ── Admin Ribbon (signals admin context) ── */
+/* ADMIN DASHBOARD */
+/* Week 7 admin extension */
+/* Kushal: the admin pages, styling by Alok and Kelsang */
+/* Admin Ribbon (signals admin context) */
+/* Kelsang: dark ribbon at top so admin know they in admin area */
 .admin-ribbon {
   background: #1a1f2e;
   color: #d1d5db;
@@ -3524,7 +3572,7 @@ body.modal-open {
   font-weight: 500;
 }
 
-/* ── Admin nav link highlight ── */
+/* Admin nav link highlight */
 .main-nav .nav-admin-link {
   color: var(--accent);
   font-weight: 600;
@@ -3534,7 +3582,8 @@ body.modal-open {
   color: #c48f00;
 }
 
-/* ── Metrics row ── */
+/* Metrics row */
+/* Alok: 6 cards showing key counts at a glance */
 .admin-metrics {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -3579,7 +3628,8 @@ body.modal-open {
   color: var(--accent);
 }
 
-/* ── Filter bar ── */
+/* Filter bar */
+/* Alok: search box + status dropdown */
 .admin-filter-bar {
   display: flex;
   align-items: center;
@@ -3673,7 +3723,8 @@ body.modal-open {
   color: var(--ink);
 }
 
-/* ── Admin Table ── */
+/* Admin Table */
+/* Alok: full orders table with hover highlight */
 .admin-table-wrap {
   border: 1px solid var(--rule);
   border-radius: var(--radius);
@@ -3765,7 +3816,9 @@ body.modal-open {
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Inline status select (in table rows) ── */
+/* Inline status select (in table rows) */
+/* Kelsang: each status have its own color matching the badge */
+/* Kushal: dropdown auto-submit on change so admin can update fast */
 .admin-status-form { margin: 0; }
 
 .admin-status-select {
@@ -3787,7 +3840,7 @@ body.modal-open {
 
 .admin-status-select:hover { opacity: 0.82; }
 
-/* Color coding matches the order-badge colors */
+/* Color coding match the order-badge colors */
 .admin-status-select-pending {
   background-color: #fff4d6;
   color: #8a5a00;
@@ -3819,7 +3872,7 @@ body.modal-open {
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23991b1b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
 }
 
-/* ── Admin link button (inside table rows) ── */
+/* Admin link button (inside table rows) */
 .admin-link-btn {
   font-family: var(--font-sans);
   font-size: 12px;
@@ -3840,11 +3893,10 @@ body.modal-open {
   border-color: var(--ink-faint);
 }
 
-/* ============================================
-   ADMIN ORDER DETAILS PAGE
-   ============================================ */
 
-/* ── Status management panel ── */
+/* ADMIN ORDER DETAILS PAGE */
+/* Status management panel */
+/* Kushal: admin can change status from dropdown here */
 .admin-status-panel {
   border: 1px solid var(--rule);
   border-radius: var(--radius);
@@ -3941,7 +3993,8 @@ body.modal-open {
   font-weight: 600;
 }
 
-/* ── Info cards grid ── */
+/* Info cards grid */
+/* Kelsang: 3-card row for customer / shipping / summary */
 .admin-info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -4011,7 +4064,7 @@ body.modal-open {
   margin: 10px 0;
 }
 
-/* ── Responsive ── */
+/* Responsive */
 @media (max-width: 1024px) {
   .admin-metrics {
     grid-template-columns: repeat(3, 1fr);

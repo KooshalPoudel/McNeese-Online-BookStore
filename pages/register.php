@@ -1,10 +1,17 @@
-<!-- Made by Kushal Poudel -->
 <?php
+// register.php
+// account creation page
+// Backend & DB insert: Kushal 
+// Form HTML/CSS: Alok and Kelsang
+// Live JS validation: Rojal (handled in main.js)
+
 $pageTitle = 'Create Account';
 require_once '../includes/config.php';
 
+// Kushal: dont let already logged-in users see register page
 if (isLoggedIn()) redirect('index.php');
 
+// Kushal: this one per-field errors so we can highlight exact problem
 $errors = [];
 $formData = [
     'first_name' => '',
@@ -15,7 +22,10 @@ $formData = [
     'address'    => ''
 ];
 
+//Process registration submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    //collecting input
     $formData['first_name'] = sanitize($_POST['first_name'] ?? '');
     $formData['last_name']  = sanitize($_POST['last_name'] ?? '');
     $formData['email']      = sanitize($_POST['email'] ?? '');
@@ -26,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $confirm_password       = $_POST['confirm_password'] ?? '';
     $terms                  = isset($_POST['terms']);
 
+    // name validation
     if (empty($formData['first_name']) || strlen($formData['first_name']) < 2) {
         $errors['first_name'] = 'First name must be at least 2 characters.';
     }
@@ -34,6 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['last_name'] = 'Last name is required.';
     }
 
+    // Email validation (Kushal)
+    // Kushal: must be valid email AND end with @mcneese.edu
+    // Rojal: i also check same thing in main.js to fail faster
+    //        but server still validates
     if (empty($formData['email'])) {
         $errors['email'] = 'McNeese email is required.';
     } elseif (!filter_var($formData['email'], FILTER_VALIDATE_EMAIL)) {
@@ -46,6 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['student_id'] = 'Student ID is required.';
     }
 
+    // Password validation (Kushal)
+    // Kushal: min 8 chars, must have uppercase, must have number
+    //         keep these rules same as strength bar in main.js
+    // Rojal: yeah strength bar uses same rules + extra bonus checks
     if (empty($password) || strlen($password) < 8) {
         $errors['password'] = 'Password must be at least 8 characters.';
     } elseif (!preg_match('/[A-Z]/', $password)) {
@@ -62,16 +81,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['terms'] = 'You must agree to the Terms of Service and Privacy Policy.';
     }
 
+    // Check for duplicates in DB (Kushal)
+    // Kushal: only run these queries if email/student_id arent already invalid
     if (empty($errors['email']) && empty($errors['student_id'])) {
         $conn = getConnection();
         $em  = $conn->real_escape_string($formData['email']);
         $sid = $conn->real_escape_string($formData['student_id']);
 
+        // duplicate email check
         $emailCheck = $conn->query("SELECT id FROM users WHERE email = '$em'");
         if ($emailCheck && $emailCheck->num_rows > 0) {
             $errors['email'] = 'An account with this email already exists.';
         }
 
+        // duplicate student id check
         $studentCheck = $conn->query("SELECT id FROM users WHERE student_id = '$sid'");
         if ($studentCheck && $studentCheck->num_rows > 0) {
             $errors['student_id'] = 'This Student ID is already registered.';
@@ -80,15 +103,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn->close();
     }
 
+    // If everything passes, create account
     if (empty($errors)) {
         $conn = getConnection();
 
+        //Kushal:escape every field individually before insert
         $fn   = $conn->real_escape_string($formData['first_name']);
         $ln   = $conn->real_escape_string($formData['last_name']);
         $em   = $conn->real_escape_string($formData['email']);
         $sid  = $conn->real_escape_string($formData['student_id']);
         $ph   = $conn->real_escape_string($formData['phone']);
         $addr = $conn->real_escape_string($formData['address']);
+
+        // kushal: hash password with PHP default bcrypt
+        //         never store plain text
         $pw   = password_hash($password, PASSWORD_DEFAULT);
 
         $sql = "INSERT INTO users (first_name, last_name, email, student_id, phone, address, password)
@@ -96,6 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($conn->query($sql)) {
             $conn->close();
+            // success, set flash msg and bounce to login
             $_SESSION['flash_success'] = 'Account created successfully. Please sign in.';
             redirect('pages/login.php');
         } else {
@@ -105,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<!-- Made by Alok Poudel and Kelsang Yonjan -->
+<!-- Form layout by Alok and Kelsang -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,19 +147,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
+<!-- REGISTER FORM CARD -->
+<!-- Alok: centered card layout, simpler than login split panel -->
 <div class="auth-page">
     <div class="auth-card">
+
+        <!-- header with logo -->
         <div class="auth-logo">
             <span>📚</span>
             <h1>Create Account</h1>
             <p>Join McNeese Bookstore and start browsing textbooks and supplies.</p>
         </div>
 
+        <!-- general error banner -->
         <?php if (!empty($errors['general'])): ?>
             <div class="alert alert-error"><?= htmlspecialchars($errors['general']) ?></div>
         <?php endif; ?>
 
+        <!-- novalidate so our JS handles errors instead of browser native -->
         <form method="POST" action="" id="registerForm" novalidate>
+
+            <!-- Name row -->
             <div class="form-row">
                 <div class="form-group">
                     <label for="first_name">First Name <span>*</span></label>
@@ -165,6 +202,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
+            <!-- Email field with hint that turns into error -->
+            <!-- Rojal: my JS in main.js toggles between hint and error class -->
             <div class="form-group">
                 <label for="email">McNeese Email Address <span>*</span></label>
                 <input
@@ -184,6 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
             </div>
 
+            <!-- Student ID + Phone row -->
             <div class="form-row">
                 <div class="form-group">
                     <label for="student_id">Student ID <span>*</span></label>
@@ -204,6 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group">
                     <label for="phone">Phone Number</label>
+                    <!-- Alok: phone optional, used for delivery updates -->
                     <input
                         type="tel"
                         id="phone"
@@ -215,6 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
+            <!-- Address (optional) -->
             <div class="form-group">
                 <label for="address">Shipping Address</label>
                 <textarea
@@ -226,6 +268,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <span class="field-hint">You can add or change this later</span>
             </div>
 
+            <!-- Password+strength bar -->
+            <!-- Rojal:strength bar updated live by main.js as user types -->
             <div class="form-group">
                 <label for="password">Password <span>*</span></label>
                 <input
@@ -240,6 +284,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <span class="field-error"><?= htmlspecialchars($errors['password']) ?></span>
                 <?php endif; ?>
 
+                <!--Rojal: this bar fills up as password gets stronger-->
                 <div class="password-strength">
                     <div class="strength-bar">
                         <div class="strength-fill" id="strengthFill"></div>
@@ -250,6 +295,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <span class="field-hint">Min. 8 characters, one uppercase letter and one number</span>
             </div>
 
+            <!-- Confirm password (live match check via main.js) -->
             <div class="form-group">
                 <label for="confirm_password">Confirm Password <span>*</span></label>
                 <input
@@ -260,12 +306,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     autocomplete="new-password"
                     required
                 >
-                <span class="field-error" id="confirmError"><?= isset($errors['confirm_password']) ? htmlspecialchars($errors['confirm_password']) : '' ?></span>
+                <span class="field-error" id="confirmError">
+                    <?= isset($errors['confirm_password']) ? htmlspecialchars($errors['confirm_password']) : '' ?>
+                </span>
             </div>
 
+            <!-- Terms checkbox -->
+            <!-- Alok: terms link placeholder for now, no actual page yet -->
             <div class="form-group">
                 <label class="checkbox-label">
-                    <input type="checkbox" name="terms" id="terms" <?= isset($_POST['terms']) ? 'checked' : '' ?>>
+                    <input type="checkbox" name="terms" id="terms"
+                           <?= isset($_POST['terms']) ? 'checked' : '' ?>>
                     I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
                 </label>
                 <?php if (isset($errors['terms'])): ?>
@@ -280,8 +331,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </form>
 
+        <!-- Divider links -->
         <div class="auth-divider">
-            Already have an account? <a href="<?= SITE_URL ?>/pages/login.php">Sign in</a>
+            Already have an account?
+            <a href="<?= SITE_URL ?>/pages/login.php">Sign in</a>
         </div>
 
         <div class="auth-divider">
